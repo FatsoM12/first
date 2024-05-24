@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+    <title>Document</title>
+    <style>
+        body{
+        background: linear-gradient(115deg, #000000, #4a4237, #ffffff);
+font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        .weather-app{
+    background: linear-gradient(115deg, #000000, #4a4237, #ffffff);
+            max-width: 860px;
+          max-height: 430px;
+        
+            margin: 45px auto;
+            box-shadow: 0 30px 50px rgba(65, 50, 100, 0.08);
+        border-radius: 0px;
+        padding: 30px;
+        color: white; 
+       
+}
+.input{
+  
+    width:280px;
+    padding: 10px;
+    font-size:small;
+   border: none;
+    color:white;
+    position: relative;
+    left: 535px;
+    bottom: 18px;
+    
+    background: linear-gradient(115deg, #000000, #4a4237, #ffffff);
+}
+.description1{
+ width: 269px;
+ position: fixed;
+ left: 59%;
+ top: 96px;
+ border-color: gray;
+ 
+}
+.description2{
+    width: 269px;
+ position: fixed;
+ left: 59%; 
+ top: 140px;
+ border-color: gray; 
+}
+.button{
+    color:white;
+   
+    padding:22px;
+    border: 0px;
+    position: relative;
+    left: 543px;
+    bottom: 29px;
+    background: linear-gradient(115deg, #000000, #4a4237, #ffffff);
+}
+h1{
+  position: relative;
+ top: 263px;
+ left: 113px;
+ font-weight: 350;
+}
+
+.temperature{
+   font-size: 395%;
+font-weight:500;
+
+}  
+.current-unit{
+    
+    
+     font-size: 65px;
+   
+  
+   
+    font-weight: bold;
+} 
+img{
+  max-width: 15%;
+  position: relative;
+  left: 305px;
+  top: 135px;
+
+  
+}
+
+
+.description{
+   position: fixed;
+   left: 59%;
+   top: 125px;
+  font-weight:300;
+  font-size: larger;
+
+}
+   
+ p{
+  position: relative;
+  top: 240px;
+  left: 113px;
+ }  
+  
+
+h5{
+   position: fixed;
+   left: 59%;
+   top: 210px;
+   font-weight:300;
+  font-size: larger;
+}
+h6{
+    position: fixed;
+   left: 59%;
+   top: 250px;
+   font-weight:300;
+  font-size: larger;
+   
+    font-size: large;
+    
+}
+h7{
+    width: 269px;
+ position: fixed;
+ left: 59%;
+ top: 119px;  
+ font-weight: 500;
+}
+.details{
+    width: 269px;
+ position: fixed;
+ left: 59%;
+ top: 226px;
+ border-color: gray;  
+}
+h8{
+    width: 269px;
+ position: fixed;
+ left: 59%;
+ top: 208px;  
+ font-weight: 500;
+}
+h9{
+    width: 269px;
+ position: fixed;
+ left: 59%;
+ top: 340px;  
+ font-size: larger;
+ font-weight: 300;
+}
+.vrl{
+    border-left: 1px solid grey;
+    height: 468px;
+    width: 1px;
+    margin: 0 auto;
+    transform: rotate(180deg);
+    position: fixed;
+    left: 58%;
+    bottom: 135px;
+}
+    </style>
+</head>
+<body>
+    <div class="weather-app">
+        <form id="search-form">
+            <input type="search" name="search" id="input" placeholder="Enter a city..." class="input" required>
+<hr class="description1">
+    
+<input type="submit" value="🔍" class="button">
+</form>
+
+   <h1  id="location">San Fransisco</h1>
+
+
+    <p id="currentFull">
+  
+ <span id="day">Wednesday</span> <span id="hours">11</span>:<span>00</span>
+
+    </p>
+
+    <h2 id="icon" class="icon"><img src="c:\Users\hlono\Documents\first\sunny-icon-5.png" ></h2>
+    <h3>
+       
+        <span class="temperature" id="current-temperature">
+            
+   33</span><span class="current-unit">&#176</span>
+
+        </h3>
+        <div class="vrl"></div>
+        <h7>Weather description</h7>
+        <hr class="description2">
+<h4 id="description" class="description">
+    <div class="sunny"> 
+    Sunny 
+</div>
+</h4>
+
+<h8>Weather Details</h8>
+<hr class="details">
+<h5><span id="iconH">Humidity
+</span><span id="humidity-percentage">7</span><span id="percentage">%</span>
+</h5>
+<h6><span id="iconW">Wind</span> <span id="windSpeed">6</span><span id="speed">km/h</span></h6>
+<h9 >Pressure       <span id="pressure">100</span><span>atm</span></h9>
+<script>
+
+function refreshWeather(response){
+    console.log(response);
+    let temperatureElement=document.querySelector("#current-temperature");
+    let temperature=response.data.temperature.current;
+    temperatureElement.innerHTML=Math.round(temperature);
+    let iconElement=document.querySelector("#icon");
+    iconElement.innerHTML=`<img src="${response.data.condition.icon_url}">`;
+    let iconDescription=document.querySelector("#description");
+    iconDescription.innerHTML=response.data.condition.description;
+    let humidityElement=document.querySelector("#humidity-percentage");
+    humidityElement.innerHTML=response.data.temperature.humidity;
+    let windElement=document.querySelector("#windSpeed");
+    windElement.innerHTML=response.data.wind.speed;
+    let pressureElement=document.querySelector("#pressure");
+    pressureElement.innerHTML=response.data.temperature.pressure;
+    
+    let date=new Date();
+    let hours=date.getHours();
+    let minutes=date.getMinutes();
+    let days=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    let day=days[date.getDay()];
+    let fullYear=document.querySelector("#currentFull");
+    fullYear.innerHTML=`${day} ${hours}:${minutes}`;
+    
+}
+function formatYear(date){
+   
+  if (minutes < 10) {
+    minutes = `0${minutes}`;
+  }
+
+  if (hours < 10) {
+    hours = `0${hours}`;
+  
+} }
+function getCity(city){
+    let apiKey="f353120e238t7f538ofa5b43de8e085c";
+    let url=`https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}`;
+    axios.get(url).then( refreshWeather);
+}
+function searchHandleSubmit (event){
+    event.preventDefault();
+    let cityElement=document.querySelector("#location");
+    let inputElement=document.querySelector("#input");
+    cityElement.innerHTML=inputElement.value;
+getCity(inputElement.value);
+}
+
+let form=document.querySelector("#search-form");
+form.addEventListener("submit",searchHandleSubmit);
+</script>
+</body>
+</html>
